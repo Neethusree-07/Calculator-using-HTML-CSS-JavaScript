@@ -1,0 +1,39 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('.btn');
+
+    let currentInput = '';
+    let operator = '';
+    let firstOperand = '';
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+
+            if (value === 'C') {
+                // Clear the display
+                display.value = '';
+                currentInput = '';
+                operator = '';
+                firstOperand = '';
+            } else if (value === '=') {
+                // Calculate result
+                if (firstOperand && operator && currentInput) {
+                    display.value = eval(`${firstOperand} ${operator} ${currentInput}`);
+                    currentInput = display.value;
+                    firstOperand = '';
+                    operator = '';
+                }
+            } else if (['+', '-', '*', '/'].includes(value)) {
+                // Set operator
+                firstOperand = currentInput;
+                operator = value;
+                currentInput = '';
+            } else {
+                // Append digit or decimal point
+                currentInput += value;
+                display.value = currentInput;
+            }
+        });
+    });
+});
